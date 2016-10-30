@@ -5,18 +5,248 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/alertify.core.css">
+  <link rel="stylesheet" href="/css/alertify.default.css">
+  <link rel="stylesheet" href="css/uiBlock.min.css">
+  <script src="https://use.fontawesome.com/f8565769ba.js"></script>
   <script src="https://apis.google.com/js/client.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <script src="app/alertify.min.js"></script>
+  <script src="app/uiBlock.min.js"></script>
+  <script type="text/javascript" src="app/app.js"></script>
+  <script type="text/javascript" src="app/appServ.js"></script>
+  <script type="text/javascript" src="app/appCtrl.js"></script>
 </head>
-<body>
+<body ng-app="ContactsApp" ng-controller="ContactsCtrl" ng-cloak>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        Google Contacts Manager
+      </div>
+    </div>
+  </nav>
+<div class="container" ng-hide="hasData">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="box">
+                <div class="box-icon">
+                    <span class="fa fa-4x fa-google"></span>
+                </div>
+                <div class="info">
+                    <h4 class="text-center">Authorize</h4>
+                    <ul class="steps-info">
+                      <li>Authorize access using google oAuth.</li>
+                      <li>Securly load your contacts.</li>
+                      <li>We don't store your data on our server.</li>
+                      <li>We don't share/sell your data to any third party.</li>
+                    </ul>
 
-<div class="container">
+                </div>
+            </div>
+        </div>
 
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="box">
+                <div class="box-icon">
+                    <span class="fa fa-4x fa-sliders"></span>
+                </div>
+                <div class="info">
+                    <h4 class="text-center">Filter</h4>
+                    <ul class="steps-info">
+                      <li>Filter contacts using date.</li>
+                      <li>See empty contacts.</li>
+                      <li>See deleted cantacts upto last 30 days.</li>
+                      <li>Some features are still in development process.</li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="box">
+                <div class="box-icon">
+                    <span class="fa fa-4x fa-address-book"></span>
+                </div>
+                <div class="info">
+                    <h4 class="text-center">Update</h4>
+                    <ul class="steps-info">
+                      <li>Update contact info.</li>
+                      <li>Delete contacts.</li>
+                      <li>See latest sync data.</li>
+                      <li>Some features are still in development process.</li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+	</div>
+  <div class="row auth-row">
+    <div class="col-md-12" ng-show="screen=='authScreen'">
+      <button ng-click="initAuth()" class="pulse-button" data-toggle="tooltip" data-placement="top" title="Login using google"></button>
+    </div>
+    <div class="col-md-12" ng-show="screen=='loadingScreen'">
+      <div class="loader"></div>
+    </div>
+  </div>
 </div>
-<script type="text/javascript" src="app/app.js"></script>
-<script type="text/javascript" src="app/appServ.js"></script>
-<script type="text/javascript" src="app/appCtrl.js"></script>
+
+<div class="container" ng-show="hasData">
+ <div class="mail-box">
+                  <aside class="sm-side">
+                      <div class="user-head">
+                          <a class="inbox-avatar" href="javascript:;">
+                              <img  width="64" hieght="60" ng-src="{{userInfo.picture}}">
+                          </a>
+                          <div class="user-name">
+                              <h5><a href="#">{{userInfo.name}}</a></h5>
+                              <span><a href="#">{{userInfo.email}}</a></span>
+                          </div>
+                          <div class="btn-group">
+                            <a class="mail-dropdown pull-right" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" ng-click="logout()"> logout</a></li>
+                            </ul>
+                          </div>
+
+
+                      </div>
+                      <div class="inbox-body">
+                          <a href="#" ng-click="notImplemented()" title="Compose" class="btn btn-compose">
+                              Create New
+                          </a>
+                          <!-- Modal -->
+                          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                          <h4 class="modal-title">Compose</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                          <form role="form" class="form-horizontal">
+                                              <div class="form-group">
+                                                  <label class="col-lg-2 control-label">To</label>
+                                                  <div class="col-lg-10">
+                                                      <input type="text" placeholder="" id="inputEmail1" class="form-control">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label class="col-lg-2 control-label">Cc / Bcc</label>
+                                                  <div class="col-lg-10">
+                                                      <input type="text" placeholder="" id="cc" class="form-control">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label class="col-lg-2 control-label">Subject</label>
+                                                  <div class="col-lg-10">
+                                                      <input type="text" placeholder="" id="inputPassword1" class="form-control">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label class="col-lg-2 control-label">Message</label>
+                                                  <div class="col-lg-10">
+                                                      <textarea rows="10" cols="30" class="form-control" id="" name=""></textarea>
+                                                  </div>
+                                              </div>
+
+                                              <div class="form-group">
+                                                  <div class="col-lg-offset-2 col-lg-10">
+                                                      <span class="btn green fileinput-button">
+                                                        <i class="fa fa-plus fa fa-white"></i>
+                                                        <span>Attachment</span>
+                                                        <input type="file" name="files[]" multiple="">
+                                                      </span>
+                                                      <button class="btn btn-send" type="submit">Send</button>
+                                                  </div>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div><!-- /.modal-content -->
+                              </div><!-- /.modal-dialog -->
+                          </div><!-- /.modal -->
+                      </div>
+                      <ul class="inbox-nav inbox-divider">
+                          <li ng-class="{'active' : activeClass=='all'}">
+                              <a href="#" ng-click="getFilteredList('all')"><i class="fa fa-globe"></i> Show All <span class="label label-info pull-right">{{states.all}}</span></a>
+                          </li>
+                          <li ng-class="{'active' : activeClass=='mobile'}">
+                              <a href="#" ng-click="getFilteredList('mobile')"><i class="fa fa-mobile"></i> Mobile <span class="label label-info pull-right">{{states.mobile}}</span></a>
+                          </li>
+                          <li ng-class="{'active' : activeClass=='email'}">
+                              <a href="#" ng-click="getFilteredList('email')"><i class="fa fa-envelope-o"></i> E-mail <span class="label label-info pull-right">{{states.email}}</span></a>
+                          </li>
+                          <li>
+                              <a href="#" ng-click="notImplemented()"><i class=" fa fa-trash-o"></i> Deleated</a>
+                          </li>
+                      </ul>
+
+                  </aside>
+                  <aside class="lg-side">
+                      <div class="inbox-body">
+                         <div class="mail-option">
+                             <div class="chk-all">
+                                 <input type="checkbox" ng-model="btnSelectAll" ng-click="selectAll()" class="mail-checkbox mail-group-checkbox">
+                                 <div class="btn-group">
+                                     <a href="#" class="btn mini all">
+                                          All
+                                     </a>
+                                 </div>
+                             </div>
+
+                             <div class="btn-group">
+                                 <a data-original-title="Refresh" ng-click="refresh()" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
+                                     <i class=" fa fa-refresh"></i>
+                                 </a>
+                             </div>
+                             <div class="btn-group hidden-phone">
+                                 <a href="#" class="btn mini blue btn-danger" ng-click="deleteContacts()">
+                                     Delete
+                                 </a>
+                             </div>
+                         </div>
+                         <div class="contact-list-container">
+                          <table class="table table-inbox table-hover">
+                            <tbody>
+                              <col width="10px" />
+                              <col width="30px" />
+                              <col width="30px" />
+                              <col width="40px" />
+                              <col width="20px" />
+                              <tr class="" ng-repeat="contact in filteredContactList">
+                                  <td class="inbox-small-cells">
+                                      <input type="checkbox" class="mail-checkbox" ng-model="contact.isSelected">
+                                  </td>
+                                  <td class="view-message phone-cell">{{contact.name}}</td>
+                                  <td class="view-message name-cell">
+                                    <div class="btn-group">
+                                        <span ng-hide="contact.phoneList" class="ml18">{{contact.phoneDisplay}}</span>
+                                        <a ng-show="contact.phoneList" data-toggle="dropdown" href="#" class="btn mini blue">
+                                            {{contact.phoneDisplay}}<i class="fa fa-angle-down phone-more"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="phone in contact.phoneList"><a href="#"> {{phone.$t}}</a></li>
+                                        </ul>
+                                    </div>
+                                   </td>
+                                  <td class="view-message contact-email-col">{{contact.email}}</td>
+                                  <td class="view-message">{{contact.updated | date}}</td>
+                              </tr>
+                          </tbody>
+                          </table>
+                        </div>
+                      </div>
+                  </aside>
+              </div>
+</div>
+<footer class="footer">
+      <div class="container">
+        <p class="text-white">By: <a href="https://www.facebook.com/genius.joker" target="_blank" class="text-white">Gaurav Srivastava</a></p>
+      </div>
+</footer>
 </body>
 </html>
