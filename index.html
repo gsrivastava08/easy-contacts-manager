@@ -9,11 +9,14 @@
   <link rel="stylesheet" href="/css/alertify.core.css">
   <link rel="stylesheet" href="/css/alertify.default.css">
   <link rel="stylesheet" href="css/uiBlock.min.css">
+  <link rel="stylesheet" href="css/datepicker.min.css">
   <script src="https://use.fontawesome.com/f8565769ba.js"></script>
   <script src="https://apis.google.com/js/client.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+  <script src="app/datepicker.js"></script>
   <script src="app/alertify.min.js"></script>
   <script src="app/uiBlock.min.js"></script>
   <script type="text/javascript" src="app/app.js"></script>
@@ -183,6 +186,16 @@
                           <li>
                               <a href="#" ng-click="notImplemented()"><i class=" fa fa-trash-o"></i> Deleated</a>
                           </li>
+                          <li>
+                            <div class="form-group date-form">
+                                <div class='input-group date' id='updateDate'>
+                                    <input type='text' class="form-control" ng-change="dateChanged()" ng-model="updateDate" placeholder="Date" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                          </li>
                       </ul>
 
                   </aside>
@@ -235,6 +248,9 @@
                                    </td>
                                   <td class="view-message contact-email-col">{{contact.email}}</td>
                                   <td class="view-message">{{contact.updated | date}}</td>
+                              </tr>
+                              <tr colspan="5" ng-hide="filteredContactList.length">
+                                  <span class="no-records" ng-hide="filteredContactList.length">Oops!!! No records found.</span>
                               </tr>
                           </tbody>
                           </table>
