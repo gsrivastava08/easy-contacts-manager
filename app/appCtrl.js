@@ -7,6 +7,7 @@ app.controller('ContactsCtrl', ['$scope', 'ContactsServ', 'blockUI' ,function($s
   $scope.filteredContactList = [];
   $scope.activeClass = 'all';
   $scope.btnSelectAll = false;
+  $scope.updateDate = null;
 
   $scope.initAuth = function(){
     $scope.screen = 'loadingScreen';
@@ -30,6 +31,7 @@ app.controller('ContactsCtrl', ['$scope', 'ContactsServ', 'blockUI' ,function($s
   $scope.getFilteredList = function(filter){
     $scope.activeClass = (!filter) ? 'all' : filter;
     $scope.btnSelectAll = false;
+    $scope.updateDate = '';
     $scope.selectAll();
     if(!filter || filter == "all"){
           $scope.filteredContactList = ContactsServ.contactsData;
@@ -91,11 +93,26 @@ app.controller('ContactsCtrl', ['$scope', 'ContactsServ', 'blockUI' ,function($s
     $scope.loadContacts();
   }
 
+  $scope.dateChanged = function(){
+    if(moment($scope.updateDate, "MM/DD/YYYY", true).isValid()){
+      $scope.filteredContactList = ContactsServ.contactsData.filter(function(item){
+        return moment(item.updated).format('MM/DD/YYYY') == $scope.updateDate;
+      })
+    }
+  }
+
   $scope.logout = function(){
     $scope.token = null;
     ContactsServ.token = null;
     $scope.hasData = false;
     $scope.screen = 'authScreen';
   }
+
+  $('#updateDate').datepicker()
+    .on('clearDate', function(e) {
+      $scope.$apply(function(){
+        $scope.getFilteredList();
+      });
+    });
 
 }])

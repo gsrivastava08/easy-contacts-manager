@@ -521,3 +521,10 @@ overflow: hidden;
 .date-form{
     padding: 0px 12px 0px 18px;
 }
+.table-condensed thead tr {
+  color: #0097a7;
+}
+.datepicker table tr td.active.active, .datepicker table tr td.active.highlighted.active, .datepicker table tr td.active.highlighted:active, .datepicker table tr td.active:active{
+  background-color: #0097a7 !important;
+}
+.no-records{color: #0097a7;padding: 30px;font-weight: bold;display: block;text-align: center;border: #e5e8ef 8px double;}
