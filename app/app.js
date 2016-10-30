@@ -2,6 +2,12 @@ var app = angular.module('ContactsApp', ['blockUI']);
 
 app.run(function(){
   $('[data-toggle="tooltip"]').tooltip();
+  $("#updateDate").datepicker({
+    autoclose: true,
+    endDate: '0d',
+    clearBtn: true
+  });
+
 })
 
 app.config(function(blockUIConfig) {
