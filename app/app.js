@@ -17,5 +17,5 @@ app.config(function(blockUIConfig) {
 app.constant('config', {
   clientId : '654918895383-cahnslo33le0qvbj3cu06amct9giv2kk.apps.googleusercontent.com',
   apiKey : 'AIzaSyB7DSEcRRSS9xomKmyuG4Ubgz-qd2yhUpw',
-  scopes : ['https://www.google.com/m8/feeds','https://www.googleapis.com/auth/userinfo.profile']
+  scopes : ['https://www.google.com/m8/feeds','https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']
 });
