@@ -9,11 +9,14 @@
   <link rel="stylesheet" href="/css/alertify.core.css">
   <link rel="stylesheet" href="/css/alertify.default.css">
   <link rel="stylesheet" href="css/uiBlock.min.css">
+  <link rel="stylesheet" href="css/datetimepicker.min.css">
   <script src="https://use.fontawesome.com/f8565769ba.js"></script>
   <script src="https://apis.google.com/js/client.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+  <script src="app/datetimepicker.js"></script>
   <script src="app/alertify.min.js"></script>
   <script src="app/uiBlock.min.js"></script>
   <script type="text/javascript" src="app/app.js"></script>
@@ -182,6 +185,16 @@
                           </li>
                           <li>
                               <a href="#" ng-click="notImplemented()"><i class=" fa fa-trash-o"></i> Deleated</a>
+                          </li>
+                          <li>
+                            <div class="form-group date-form">
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type='text' class="form-control" placeholder="Date" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
                           </li>
                       </ul>
 
