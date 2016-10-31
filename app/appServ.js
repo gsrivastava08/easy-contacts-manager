@@ -18,7 +18,8 @@ app.factory('ContactsServ', ["$q", "$timeout", "config", "$http", function($q, $
     gapi.auth.authorize({
       client_id: config.clientId,
       scope: config.scopes,
-      immediate: false
+      immediate: false,
+      authuser: -1
     }, function(dt){
         ContactsServ.token = dt.access_token;
         deferred.resolve();
